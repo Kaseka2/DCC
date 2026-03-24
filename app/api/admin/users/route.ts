@@ -24,7 +24,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Unauthorized." }, { status: 401 });
   }
 
-  const { data: profile } = await supabase.from("users").select("role").eq("id", user.id).maybeSingle();
+  const { data: profile } = (await supabase
+    .from("users")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle()) as { data: { role: Role } | null };
 
   if (profile?.role !== "admin") {
     return NextResponse.json({ message: "Only admins can create users." }, { status: 403 });
