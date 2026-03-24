@@ -1,14 +1,15 @@
 import Link from "next/link";
+import type { Route } from "next";
 
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 
 const links = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/events", label: "Events" },
-  { href: "/sermons", label: "Sermons" },
-  { href: "/contact", label: "Contact" },
+  { href: "/" as Route, label: "Home" },
+  { href: "/about" as Route, label: "About" },
+  { href: "/events" as Route, label: "Events" },
+  { href: "/sermons" as Route, label: "Sermons" },
+  { href: "/contact" as Route, label: "Contact" },
 ];
 
 export function SiteHeader() {
