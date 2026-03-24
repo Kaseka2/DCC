@@ -55,6 +55,7 @@ export async function POST(request: Request) {
   }
 
   const adminClient = createAdminClient();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const adminDb = adminClient as any;
   const email = usernameToEmail(username);
 
