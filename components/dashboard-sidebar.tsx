@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { usePathname } from "next/navigation";
 
 import { dashboardLinks } from "@/lib/constants";
@@ -25,7 +26,7 @@ export function DashboardSidebar({ role }: DashboardSidebarProps) {
         {visibleLinks.map((link) => (
           <Link
             key={link.href}
-            href={link.href}
+            href={link.href as Route}
             className={cn(
               "flex rounded-2xl px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground",
               pathname === link.href && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",

@@ -6,7 +6,13 @@ export const roles: Role[] = ["admin", "pastor", "treasurer", "secretary", "memb
 export const donationTypes = ["tithe", "offering", "pledge"] as const;
 export const attendanceStatuses = ["present", "absent"] as const;
 
-export const dashboardLinks = [
+type DashboardLink = {
+  href: Route;
+  label: string;
+  roles: Role[];
+};
+
+export const dashboardLinks: DashboardLink[] = [
   { href: "/dashboard" as Route, label: "Overview", roles: ["admin", "pastor", "treasurer", "secretary"] as Role[] },
   { href: "/dashboard/users" as Route, label: "Users", roles: ["admin"] as Role[] },
   { href: "/dashboard/members" as Route, label: "Members", roles: ["admin", "pastor", "secretary"] as Role[] },
