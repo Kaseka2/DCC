@@ -1,7 +1,13 @@
 import { AdminUsersClient } from "@/components/admin-users-client";
 import { requireRoles } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
+import type { Member, Role } from "@/lib/types";
+
+type UserRow = {
+  id: string;
+  role: Role;
+  created_at: string;
+};
 
 function toUsername(email: string | null) {
   if (!email) return "unassigned";
@@ -17,11 +23,14 @@ export default async function DashboardUsersPage() {
     supabase.from("members").select("user_id, full_name, email").not("user_id", "is", null),
   ]);
 
-  const managedUsers = (users ?? []).map((user) => {
-    const member = members?.find((item) => item.user_id === user.id);
+  const userRows = (users ?? []) as UserRow[];
+  const memberRows = (members ?? []) as Pick<Member, "user_id" | "full_name" | "email">[];
+
+  const managedUsers = userRows.map((user: UserRow) => {
+    const member = memberRows.find((item) => item.user_id === user.id);
     return {
       id: user.id,
-      role: user.role as Role,
+      role: user.role,
       created_at: user.created_at,
       full_name: member?.full_name ?? "Unknown user",
       email: member?.email ?? null,

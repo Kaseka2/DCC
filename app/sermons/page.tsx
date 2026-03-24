@@ -6,10 +6,12 @@ import { SiteHeader } from "@/components/site-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/format";
+import type { Sermon } from "@/lib/types";
 
 export default async function SermonsPage() {
   const supabase = await createClient();
   const { data: sermons } = await supabase.from("sermons").select("*").order("date", { ascending: false });
+  const sermonRows = (sermons ?? []) as Sermon[];
 
   return (
     <div className="min-h-screen">
@@ -20,8 +22,8 @@ export default async function SermonsPage() {
           <h1 className="mt-4 text-4xl font-semibold">Messages and teachings available on demand.</h1>
         </div>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {!sermons?.length ? <EmptyState title="No sermons published" description="Upload sermons from the dashboard to populate this page." /> : null}
-          {sermons?.map((sermon) => (
+          {!sermonRows.length ? <EmptyState title="No sermons published" description="Upload sermons from the dashboard to populate this page." /> : null}
+          {sermonRows.map((sermon: Sermon) => (
             <Card key={sermon.id}>
               <CardHeader>
                 <CardTitle>{sermon.title}</CardTitle>

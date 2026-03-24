@@ -4,10 +4,12 @@ import { SiteHeader } from "@/components/site-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/format";
+import type { Event } from "@/lib/types";
 
 export default async function EventsPage() {
   const supabase = await createClient();
   const { data: events } = await supabase.from("events").select("*").order("event_date");
+  const eventRows = (events ?? []) as Event[];
 
   return (
     <div className="min-h-screen">
@@ -18,8 +20,8 @@ export default async function EventsPage() {
           <h1 className="mt-4 text-4xl font-semibold">Upcoming gatherings, services, and ministry moments.</h1>
         </div>
         <div className="mt-10 grid gap-6">
-          {!events?.length ? <EmptyState title="No events scheduled" description="Publish events from the dashboard to see them here." /> : null}
-          {events?.map((event) => (
+          {!eventRows.length ? <EmptyState title="No events scheduled" description="Publish events from the dashboard to see them here." /> : null}
+          {eventRows.map((event: Event) => (
             <Card key={event.id}>
               <CardHeader>
                 <CardTitle>{event.title}</CardTitle>
