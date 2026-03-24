@@ -2,9 +2,11 @@ import { NextResponse } from "next/server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import type { Role } from "@/lib/types";
+import type { Database, Role } from "@/lib/types";
 
 const allowedRoles: Role[] = ["pastor", "treasurer", "secretary", "member"];
+type UserUpdate = Database["public"]["Tables"]["users"]["Update"];
+type MemberUpdate = Database["public"]["Tables"]["members"]["Update"];
 
 function normalizeUsername(username: string) {
   return username.trim().toLowerCase().replace(/\s+/g, ".");
@@ -70,13 +72,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: error?.message ?? "Unable to create user." }, { status: 400 });
   }
 
-  await adminClient.from("users").update({ role }).eq("id", data.user.id);
+  await adminClient
+    .from("users")
+    .update({ role } as UserUpdate)
+    .eq("id", data.user.id);
   await adminClient
     .from("members")
-    .update({
-      full_name: fullName,
-      email,
-    })
+    .update(
+      {
+        full_name: fullName,
+        email,
+      } as MemberUpdate,
+    )
     .eq("user_id", data.user.id);
 
   return NextResponse.json({ message: "User created successfully." }, { status: 201 });
