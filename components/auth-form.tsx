@@ -7,30 +7,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { roles } from "@/lib/constants";
 import { createClient } from "@/lib/supabase/client";
-import type { Role } from "@/lib/types";
-
-interface AuthFormProps {
-  mode: "login" | "signup";
-}
 
 function normalizeCredentialToEmail(value: string) {
   const trimmed = value.trim().toLowerCase();
   return trimmed.includes("@") ? trimmed : `${trimmed}@churchflow.local`;
 }
 
-export function AuthForm({ mode }: AuthFormProps) {
+function getRedirectPath(role: string | null) {
+  return role === "member" ? "/portal" : "/dashboard";
+}
+
+export function AuthForm() {
   const router = useRouter();
   const supabase = createClient();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [role, setRole] = useState<Role>("member");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const isSignup = mode === "signup";
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,28 +33,6 @@ export function AuthForm({ mode }: AuthFormProps) {
 
     try {
       const email = normalizeCredentialToEmail(identifier);
-
-      if (isSignup) {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: fullName,
-              requested_role: role,
-            },
-          },
-        });
-
-        if (error) {
-          setMessage(error.message);
-          return;
-        }
-
-        setMessage("Account created. You can now sign in with your username or email.");
-        return;
-      }
-
       const { error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
@@ -68,7 +40,17 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      router.push("/dashboard");
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const { data: profile } = await supabase
+        .from("users")
+        .select("role")
+        .eq("id", user?.id ?? "")
+        .maybeSingle();
+
+      router.push(getRedirectPath(profile?.role ?? null));
       router.refresh();
     } catch (error) {
       const friendlyMessage =
@@ -88,21 +70,13 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <Card className="mx-auto w-full max-w-md">
       <CardHeader>
-        <CardTitle>{isSignup ? "Create your account" : "Welcome back"}</CardTitle>
+        <CardTitle>Sign in</CardTitle>
         <CardDescription>
-          {isSignup
-            ? "Register a secure account for the church management platform."
-            : "Sign in to access the admin dashboard or member portal."}
+          Access is provisioned by an administrator. Sign in with the username and password you were given.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form className="space-y-4" onSubmit={handleSubmit}>
-          {isSignup ? (
-            <div className="space-y-2">
-              <Label htmlFor="full-name">Full name</Label>
-              <Input id="full-name" value={fullName} onChange={(event) => setFullName(event.target.value)} required />
-            </div>
-          ) : null}
           <div className="space-y-2">
             <Label htmlFor="identifier">Username or email</Label>
             <Input
@@ -110,7 +84,7 @@ export function AuthForm({ mode }: AuthFormProps) {
               type="text"
               value={identifier}
               onChange={(event) => setIdentifier(event.target.value)}
-              placeholder={isSignup ? "e.g. john.doe" : "Enter username or email"}
+              placeholder="Enter username or email"
               required
             />
           </div>
@@ -124,26 +98,9 @@ export function AuthForm({ mode }: AuthFormProps) {
               required
             />
           </div>
-          {isSignup ? (
-            <div className="space-y-2">
-              <Label>Role</Label>
-              <Select value={role} onValueChange={(value) => setRole(value as Role)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose role" />
-                </SelectTrigger>
-                <SelectContent>
-                  {roles.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ) : null}
           {message ? <p className="text-sm text-muted-foreground">{message}</p> : null}
           <Button className="w-full" type="submit" disabled={loading}>
-            {loading ? "Please wait..." : isSignup ? "Create account" : "Sign in"}
+            {loading ? "Please wait..." : "Sign in"}
           </Button>
         </form>
       </CardContent>

@@ -58,11 +58,42 @@ npm run dev
 - `secretary`: members, attendance, and events
 - `member`: own profile, own giving, own prayer requests
 
+## Auth Flow
+
+- Public self-signup is disabled in the working flow.
+- Everyone signs in from `/auth/login`.
+- New accounts are provisioned by an admin from `/dashboard/users`.
+- After login, users are redirected by role:
+  - `admin`, `pastor`, `treasurer`, `secretary` -> `/dashboard`
+  - `member` -> `/portal`
+
+## First Admin Bootstrap
+
+Before the admin can create other users, create the first admin manually in Supabase:
+
+1. Go to `Authentication > Users`.
+2. Create a user with a username-shaped email such as `admin@churchflow.local` and a password.
+3. Run this SQL in Supabase:
+
+```sql
+update public.users
+set role = 'admin'
+where id = (
+  select id
+  from auth.users
+  where email = 'admin@churchflow.local'
+);
+```
+
+4. Sign in through `/auth/login` using `admin` as the username and the password you created.
+5. Open `/dashboard/users` and create the rest of the accounts from the admin UI.
+
 ## Supabase Notes
 
 - New signups create a linked `users` row and a starter `members` row through the trigger in `supabase/schema.sql`.
 - Role-based protection is enforced in both dashboard route guards and `supabase/rls.sql`.
 - Sermon media uses a `media_url` field now, and can be extended later to Supabase Storage uploads.
+- Admin-driven account creation uses `SUPABASE_SERVICE_ROLE_KEY` on the server route at `app/api/admin/users/route.ts`.
 
 ## MVP Priority Covered
 

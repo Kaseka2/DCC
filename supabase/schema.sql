@@ -114,19 +114,9 @@ language plpgsql
 security definer
 set search_path = public
 as $$
-declare
-  requested_role text;
 begin
-  requested_role := coalesce(new.raw_user_meta_data ->> 'requested_role', 'member');
-
   insert into public.users (id, role)
-  values (
-    new.id,
-    case
-      when requested_role in ('admin', 'pastor', 'treasurer', 'secretary', 'member') then requested_role
-      else 'member'
-    end
-  )
+  values (new.id, 'member')
   on conflict (id) do nothing;
 
   insert into public.members (user_id, full_name, email)

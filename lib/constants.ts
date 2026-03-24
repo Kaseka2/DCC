@@ -7,6 +7,7 @@ export const attendanceStatuses = ["present", "absent"] as const;
 
 export const dashboardLinks = [
   { href: "/dashboard", label: "Overview", roles: ["admin", "pastor", "treasurer", "secretary"] as Role[] },
+  { href: "/dashboard/users", label: "Users", roles: ["admin"] as Role[] },
   { href: "/dashboard/members", label: "Members", roles: ["admin", "pastor", "secretary"] as Role[] },
   { href: "/dashboard/donations", label: "Donations", roles: ["admin", "treasurer"] as Role[] },
   { href: "/dashboard/events", label: "Events", roles: ["admin", "secretary"] as Role[] },

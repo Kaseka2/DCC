@@ -1,19 +1,5 @@
-import Link from "next/link";
-
-import { AuthForm } from "@/components/auth-form";
+import { redirect } from "next/navigation";
 
 export default function SignupPage() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-warm-glow px-4 py-12">
-      <div className="w-full max-w-md space-y-6">
-        <AuthForm mode="signup" />
-        <p className="text-center text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link href="/auth/login" className="font-medium text-primary hover:text-primary/80">
-            Sign in
-          </Link>
-        </p>
-      </div>
-    </main>
-  );
+  redirect("/auth/login");
 }
