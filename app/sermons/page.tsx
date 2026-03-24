@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { EmptyState } from "@/components/empty-state";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -32,9 +30,14 @@ export default async function SermonsPage() {
                 <p>Preacher: {sermon.preacher}</p>
                 <p>Date: {formatDate(sermon.date)}</p>
                 {sermon.media_url ? (
-                  <Link href={sermon.media_url} className="font-medium text-primary hover:text-primary/80">
+                  <a
+                    href={sermon.media_url}
+                    className="font-medium text-primary hover:text-primary/80"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     Watch or listen
-                  </Link>
+                  </a>
                 ) : (
                   <p>Media link coming soon.</p>
                 )}
