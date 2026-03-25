@@ -9,6 +9,7 @@ import { Table, TBody, TD, TH, THead } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { type Role } from "@/lib/types";
 import { normalizeUsername } from "@/lib/username";
+import { PageHeader } from "@/components/page-header";
 
 type UserRow = {
   id: string;
@@ -96,6 +97,10 @@ export default function UserManagement() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="User Management"
+        description="Create staff and member accounts with assigned roles."
+      />
       <Card>
         <CardHeader>
           <CardTitle>Admin User Management</CardTitle>

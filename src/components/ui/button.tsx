@@ -17,14 +17,14 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent",
+    "bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent shadow-sm",
   secondary:
-    "bg-secondary text-secondary-foreground hover:bg-secondary/80 border border-transparent",
+    "bg-secondary text-secondary-foreground hover:bg-secondary/85 border border-transparent",
   outline:
     "bg-transparent text-foreground border border-border hover:bg-muted/60",
   ghost: "bg-transparent text-foreground hover:bg-muted/60 border-transparent",
   destructive:
-    "bg-danger text-danger-foreground hover:bg-danger/90 border border-transparent",
+    "bg-danger text-danger-foreground hover:bg-danger/90 border border-transparent shadow-sm",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

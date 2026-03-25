@@ -13,7 +13,7 @@ const allowedRoles: Role[] = [
 ];
 
 async function ensureAdmin() {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
   const { data: authData } = await supabase.auth.getUser();
 
   if (!authData.user) {

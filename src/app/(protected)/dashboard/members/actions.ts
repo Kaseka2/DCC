@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function createMember(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
 
   const fullName = String(formData.get("full_name") || "").trim();
   const username = String(formData.get("username") || "").trim().toLowerCase();
@@ -26,7 +26,7 @@ export async function createMember(formData: FormData) {
 }
 
 export async function updateMember(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
 
   const memberId = String(formData.get("member_id") || "");
   const fullName = String(formData.get("full_name") || "").trim();
@@ -50,7 +50,7 @@ export async function updateMember(formData: FormData) {
 }
 
 export async function deleteMember(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
   const memberId = String(formData.get("member_id") || "");
 
   if (!memberId) {

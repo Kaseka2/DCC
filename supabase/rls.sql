@@ -2,6 +2,9 @@ alter table public.users enable row level security;
 alter table public.members enable row level security;
 alter table public.donations enable row level security;
 alter table public.ministries enable row level security;
+alter table public.events enable row level security;
+alter table public.sermons enable row level security;
+alter table public.attendance enable row level security;
 
 -- Users table policies
 create policy "Users can read own role"
@@ -86,3 +89,71 @@ create policy "Admins manage ministries"
   for all
   using (public.current_role() = 'admin')
   with check (public.current_role() = 'admin');
+
+-- Events table policies
+create policy "Admins manage events"
+  on public.events
+  for all
+  using (public.current_role() = 'admin')
+  with check (public.current_role() = 'admin');
+
+create policy "Secretaries manage events"
+  on public.events
+  for all
+  using (public.current_role() = 'secretary')
+  with check (public.current_role() = 'secretary');
+
+create policy "Pastors read events"
+  on public.events
+  for select
+  using (public.current_role() = 'pastor');
+
+create policy "Members read events"
+  on public.events
+  for select
+  using (auth.uid() is not null);
+
+-- Sermons table policies
+create policy "Admins manage sermons"
+  on public.sermons
+  for all
+  using (public.current_role() = 'admin')
+  with check (public.current_role() = 'admin');
+
+create policy "Pastors manage sermons"
+  on public.sermons
+  for all
+  using (public.current_role() = 'pastor')
+  with check (public.current_role() = 'pastor');
+
+create policy "Everyone read sermons"
+  on public.sermons
+  for select
+  using (auth.uid() is not null);
+
+-- Attendance table policies
+create policy "Admins manage attendance"
+  on public.attendance
+  for all
+  using (public.current_role() = 'admin')
+  with check (public.current_role() = 'admin');
+
+create policy "Secretaries manage attendance"
+  on public.attendance
+  for all
+  using (public.current_role() = 'secretary')
+  with check (public.current_role() = 'secretary');
+
+create policy "Pastors read attendance"
+  on public.attendance
+  for select
+  using (public.current_role() = 'pastor');
+
+create policy "Members read own attendance"
+  on public.attendance
+  for select
+  using (
+    member_id in (
+      select id from public.members where user_id = auth.uid()
+    )
+  );

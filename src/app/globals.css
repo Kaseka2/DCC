@@ -1,19 +1,39 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f7f4;
-  --foreground: #1f1f1c;
-  --muted: #ebe9e2;
-  --muted-foreground: #6b6a63;
-  --border: #d9d6cd;
-  --primary: #1f4b3f;
-  --primary-foreground: #f7f7f4;
-  --secondary: #efe9db;
-  --secondary-foreground: #2a2a26;
+  --background: #f6f4f0;
+  --foreground: #1d1b17;
+  --muted: #efece6;
+  --muted-foreground: #6e6a63;
+  --border: #dad4c9;
+  --primary: #173a32;
+  --primary-foreground: #f7f4ef;
+  --secondary: #f0e6d5;
+  --secondary-foreground: #2a2621;
   --danger: #8b2c2c;
   --danger-foreground: #fff7f7;
-  --accent: #c9b889;
-  --ring: #2e5a4d;
+  --accent: #c6b079;
+  --ring: #2a5448;
+  --surface: #ffffff;
+  --surface-muted: #f0ede7;
+}
+
+[data-theme="dark"] {
+  --background: #161513;
+  --foreground: #f4f1ec;
+  --muted: #24221d;
+  --muted-foreground: #c2bcb0;
+  --border: #2f2b24;
+  --primary: #e4d9c4;
+  --primary-foreground: #1b1813;
+  --secondary: #2a251d;
+  --secondary-foreground: #f4f1ec;
+  --danger: #c96b6b;
+  --danger-foreground: #1b1513;
+  --accent: #c6b079;
+  --ring: #e4d9c4;
+  --surface: #1d1b16;
+  --surface-muted: #22201b;
 }
 
 @theme inline {
@@ -37,5 +57,23 @@
 }
 
 body {
-  font-family: "Georgia", "Times New Roman", serif;
+  font-family: var(--font-body), "Source Sans 3", "Helvetica Neue", sans-serif;
+  background: linear-gradient(180deg, var(--background) 0%, var(--muted) 40%, var(--surface-muted) 100%);
+  color: var(--foreground);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display), "Playfair Display", serif;
+  letter-spacing: -0.02em;
+}
+
+table tbody tr:nth-child(even) {
+  background: rgba(239, 236, 230, 0.5);
+}
+
+table tbody tr:hover {
+  background: rgba(214, 204, 184, 0.4);
 }

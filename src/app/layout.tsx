@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
+import { Playfair_Display, Source_Sans_3 } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
+
+const displayFont = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+
+const bodyFont = Source_Sans_3({
+  subsets: ["latin"],
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "Church Management System",
@@ -12,9 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html
+      lang="en"
+      className={`${displayFont.variable} ${bodyFont.variable} h-full antialiased`}
+    >
       <body className="min-h-full bg-background text-foreground">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function createDonation(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
 
   const memberId = String(formData.get("member_id") || "");
   const amount = Number(formData.get("amount") || 0);
@@ -28,7 +28,7 @@ export async function createDonation(formData: FormData) {
 }
 
 export async function updateDonation(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
 
   const donationId = String(formData.get("donation_id") || "");
   const amount = Number(formData.get("amount") || 0);
@@ -54,7 +54,7 @@ export async function updateDonation(formData: FormData) {
 }
 
 export async function deleteDonation(formData: FormData) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
   const donationId = String(formData.get("donation_id") || "");
 
   if (!donationId) {

@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCurrentRole } from "@/lib/auth";
+import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,25 +20,32 @@ export default async function MembersPage() {
 
   return (
     <div className="space-y-6">
+      <PageHeader
+        title="Members"
+        description="Manage member profiles, contact details, and ministry assignments."
+      />
       <Card>
         <CardHeader>
-          <CardTitle>Members</CardTitle>
+          <CardTitle>Member Directory</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {canManage && (
-            <form action={createMember} className="grid gap-3 md:grid-cols-4">
-              <Input name="full_name" placeholder="Full name" required />
-              <Input name="username" placeholder="Username" required />
-              <Input name="phone" placeholder="Phone" />
-              <Select name="gender" defaultValue="">
-                <option value="">Gender</option>
-                <option value="female">Female</option>
-                <option value="male">Male</option>
-              </Select>
-              <div className="md:col-span-4">
-                <Button type="submit">Add Member</Button>
-              </div>
-            </form>
+            <div className="rounded-2xl border border-border bg-[var(--surface-muted)] p-4">
+              <p className="text-sm font-semibold">Add new member</p>
+              <form action={createMember} className="mt-3 grid gap-3 md:grid-cols-4">
+                <Input name="full_name" placeholder="Full name" required />
+                <Input name="username" placeholder="Username" required />
+                <Input name="phone" placeholder="Phone" />
+                <Select name="gender" defaultValue="">
+                  <option value="">Gender</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                </Select>
+                <div className="md:col-span-4">
+                  <Button type="submit">Add Member</Button>
+                </div>
+              </form>
+            </div>
           )}
 
           <Table>

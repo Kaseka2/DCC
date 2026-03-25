@@ -1,6 +1,6 @@
 # Church Management System (MVP)
 
-This is a production-ready MVP for a Church Management System built with Next.js App Router, Supabase, and Tailwind CSS. It focuses on secure login, admin-created users, role-based access, members, and donations.
+This is a production-ready MVP for a Church Management System built with Next.js App Router, Supabase, and Tailwind CSS. It focuses on secure login, admin-created users, role-based access, members, donations, attendance, events, sermons, and CSV exports.
 
 ## Tech Stack
 - Next.js App Router (TypeScript, strict)
@@ -73,8 +73,7 @@ Supabase does not allow public signup for this app. You must create the first ad
 
 ## MVP Roadmap Extensions
 Future additions should build on this foundation:
-- Events
-- Attendance tracking
-- Sermons
 - Public pages
-
+- Volunteer scheduling
+- Sermon media library
+- Giving integrations

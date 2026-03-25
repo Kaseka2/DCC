@@ -45,6 +45,35 @@ create table if not exists public.donations (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text,
+  location text,
+  start_date date not null,
+  end_date date,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.sermons (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  preacher text not null,
+  date date not null,
+  summary text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.attendance (
+  id uuid primary key default gen_random_uuid(),
+  member_id uuid not null references public.members(id) on delete cascade,
+  event_id uuid references public.events(id) on delete set null,
+  date date not null,
+  status text not null check (status in ('present', 'absent', 'excused')),
+  notes text,
+  created_at timestamptz not null default now()
+);
+
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
