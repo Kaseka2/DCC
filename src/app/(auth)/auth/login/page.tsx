@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLanguage } from "@/components/language-provider";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -124,7 +125,8 @@ export default function LoginPage() {
                   {error}
                 </div>
               )}
-              <Button className="w-full" disabled={isLoading} type="submit">
+              <Button className="w-full" isLoading={isLoading} type="submit">
+                {isLoading && <Spinner className="h-4 w-4" />}
                 {isLoading ? "Signing in..." : t("signIn")}
               </Button>
             </form>

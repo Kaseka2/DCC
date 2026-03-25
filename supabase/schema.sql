@@ -1,12 +1,17 @@
 create extension if not exists "pgcrypto";
 
-create type public.user_role as enum (
-  'admin',
-  'pastor',
-  'secretary',
-  'treasurer',
-  'member'
-);
+do $$
+begin
+  if not exists (select 1 from pg_type where typname = 'user_role') then
+    create type public.user_role as enum (
+      'admin',
+      'pastor',
+      'secretary',
+      'treasurer',
+      'member'
+    );
+  end if;
+end$$;
 
 create table if not exists public.users (
   id uuid primary key references auth.users(id) on delete cascade,
@@ -42,6 +47,24 @@ create table if not exists public.donations (
   type text not null,
   payment_method text,
   date date not null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.offering_types (
+  id uuid primary key default gen_random_uuid(),
+  name text not null unique,
+  description text,
+  requires_member boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.offerings (
+  id uuid primary key default gen_random_uuid(),
+  offering_type_id uuid not null references public.offering_types(id) on delete restrict,
+  member_id uuid references public.members(id) on delete set null,
+  amount numeric(12, 2) not null check (amount >= 0),
+  date date not null,
+  notes text,
   created_at timestamptz not null default now()
 );
 

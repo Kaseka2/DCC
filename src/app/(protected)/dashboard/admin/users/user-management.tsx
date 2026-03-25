@@ -11,6 +11,7 @@ import { type Role } from "@/lib/types";
 import { normalizeUsername } from "@/lib/username";
 import { PageHeader } from "@/components/page-header";
 import { useLanguage } from "@/components/language-provider";
+import { Spinner } from "@/components/ui/spinner";
 
 type UserRow = {
   id: string;
@@ -28,6 +29,7 @@ export default function UserManagement() {
   const { t } = useLanguage();
   const [users, setUsers] = useState<UserRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     full_name: "",
@@ -65,6 +67,7 @@ export default function UserManagement() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setIsSubmitting(true);
 
     try {
       const response = await fetch("/api/admin/users", {
@@ -94,6 +97,8 @@ export default function UserManagement() {
       await loadUsers();
     } catch {
       setError("Unable to create user.");
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -157,7 +162,10 @@ export default function UserManagement() {
               placeholder={t("phone")}
             />
             <div className="md:col-span-5">
-              <Button type="submit">{t("createUser")}</Button>
+              <Button type="submit" isLoading={isSubmitting}>
+                {isSubmitting && <Spinner className="h-4 w-4" />}
+                {isSubmitting ? "Saving..." : t("createUser")}
+              </Button>
             </div>
           </form>
 

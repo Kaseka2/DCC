@@ -1,7 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TBody, TD, TH, THead } from "@/components/ui/table";
@@ -42,7 +42,7 @@ export function SermonsClient({
                 <Input name="date" type="date" required />
                 <Input name="summary" placeholder={t("summary")} />
                 <div className="md:col-span-4">
-                  <Button type="submit">{t("addSermon")}</Button>
+                  <SubmitButton label={t("addSermon")} pendingLabel="Saving..." />
                 </div>
               </form>
             </div>
@@ -74,15 +74,21 @@ export function SermonsClient({
                           <Input name="preacher" defaultValue={sermon.preacher} className="h-8" />
                           <Input name="date" type="date" defaultValue={sermon.date} className="h-8" />
                           <Input name="summary" defaultValue={sermon.summary ?? ""} className="h-8" />
-                          <Button size="sm" type="submit" variant="secondary">
-                            {t("save")}
-                          </Button>
+                          <SubmitButton
+                            size="sm"
+                            variant="secondary"
+                            label={t("save")}
+                            pendingLabel="Saving..."
+                          />
                         </form>
                         <form action={deleteSermon}>
                           <input type="hidden" name="sermon_id" value={sermon.id} />
-                          <Button size="sm" type="submit" variant="destructive">
-                            {t("delete")}
-                          </Button>
+                          <SubmitButton
+                            size="sm"
+                            variant="destructive"
+                            label={t("delete")}
+                            pendingLabel="Deleting..."
+                          />
                         </form>
                       </div>
                     </TD>

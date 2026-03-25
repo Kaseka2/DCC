@@ -4,15 +4,15 @@ import { DashboardClient } from "./dashboard-client";
 export default async function DashboardPage() {
   const supabase = await createSupabaseServerClient();
 
-  const [{ count: membersCount }, { data: donations }, { count: eventsCount }] =
+  const [{ count: membersCount }, { data: offerings }, { count: eventsCount }] =
     await Promise.all([
       supabase.from("members").select("id", { count: "exact", head: true }),
-      supabase.from("donations").select("amount"),
+      supabase.from("offerings").select("amount"),
       supabase.from("events").select("id", { count: "exact", head: true }),
     ]);
 
   const totalDonations =
-    donations?.reduce((sum, row) => sum + Number(row.amount || 0), 0) ?? 0;
+    offerings?.reduce((sum, row) => sum + Number(row.amount || 0), 0) ?? 0;
 
   return (
     <DashboardClient

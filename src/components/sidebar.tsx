@@ -29,10 +29,12 @@ const baseLinks: { href: string; key: DictionaryKey; icon: typeof LayoutDashboar
 export function Sidebar({
   role,
   collapsed,
+  onToggle,
   className,
 }: {
   role: Role;
   collapsed: boolean;
+  onToggle?: () => void;
   className?: string;
 }) {
   const { t } = useLanguage();
@@ -52,17 +54,29 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "bg-[var(--surface)] border-r border-border px-4 py-6 transition-all",
-        collapsed ? "w-[88px]" : "w-full",
+        "bg-[var(--surface)] border-r border-border px-3 py-4 transition-all",
+        collapsed ? "w-[72px]" : "w-full",
         className
       )}
     >
-      <div className="mb-6">
-        <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          {collapsed ? "CMS" : "Church CMS"}
-        </p>
-        {!collapsed && (
-          <h2 className="text-lg font-semibold">{t("dashboard")}</h2>
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <div>
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            {collapsed ? "CMS" : "Church CMS"}
+          </p>
+          {!collapsed && (
+            <h2 className="text-lg font-semibold">{t("dashboard")}</h2>
+          )}
+        </div>
+        {onToggle && (
+          <button
+            type="button"
+            onClick={onToggle}
+            className="rounded-md border border-border px-2 py-1 text-xs font-semibold text-muted-foreground hover:bg-muted/60"
+            aria-label={collapsed ? t("expand") : t("collapse")}
+          >
+            {collapsed ? "»" : "«"}
+          </button>
         )}
       </div>
       <nav className="space-y-1">
@@ -71,7 +85,7 @@ export function Sidebar({
             key={link.href}
             href={link.href}
             className={cn(
-              "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-muted/60",
+              "flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-foreground hover:bg-muted/60 cursor-pointer",
               collapsed && "justify-center"
             )}
           >

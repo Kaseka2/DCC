@@ -1,7 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TBody, TD, TH, THead } from "@/components/ui/table";
@@ -44,7 +44,7 @@ export function EventsClient({
                 <Input name="start_date" type="date" required />
                 <Input name="end_date" type="date" />
                 <div className="md:col-span-5">
-                  <Button type="submit">{t("addEvent")}</Button>
+                  <SubmitButton label={t("addEvent")} pendingLabel="Saving..." />
                 </div>
               </form>
             </div>
@@ -79,15 +79,21 @@ export function EventsClient({
                           <Input name="description" defaultValue={event.description ?? ""} className="h-8" />
                           <Input name="start_date" type="date" defaultValue={event.start_date} className="h-8" />
                           <Input name="end_date" type="date" defaultValue={event.end_date ?? ""} className="h-8" />
-                          <Button size="sm" type="submit" variant="secondary">
-                            {t("save")}
-                          </Button>
+                          <SubmitButton
+                            size="sm"
+                            variant="secondary"
+                            label={t("save")}
+                            pendingLabel="Saving..."
+                          />
                         </form>
                         <form action={deleteEvent}>
                           <input type="hidden" name="event_id" value={event.id} />
-                          <Button size="sm" type="submit" variant="destructive">
-                            {t("delete")}
-                          </Button>
+                          <SubmitButton
+                            size="sm"
+                            variant="destructive"
+                            label={t("delete")}
+                            pendingLabel="Deleting..."
+                          />
                         </form>
                       </div>
                     </TD>

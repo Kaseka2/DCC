@@ -1,7 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -71,7 +71,7 @@ export function AttendanceClient({
                 </Select>
                 <Input name="notes" placeholder={t("notes")} />
                 <div className="md:col-span-5">
-                  <Button type="submit">{t("addAttendance")}</Button>
+                  <SubmitButton label={t("addAttendance")} pendingLabel="Saving..." />
                 </div>
               </form>
             </div>
@@ -107,15 +107,21 @@ export function AttendanceClient({
                             <option value="excused">Excused</option>
                           </Select>
                           <Input name="notes" defaultValue={row.notes ?? ""} className="h-8" />
-                          <Button size="sm" type="submit" variant="secondary">
-                            {t("save")}
-                          </Button>
+                          <SubmitButton
+                            size="sm"
+                            variant="secondary"
+                            label={t("save")}
+                            pendingLabel="Saving..."
+                          />
                         </form>
                         <form action={deleteAttendance}>
                           <input type="hidden" name="attendance_id" value={row.id} />
-                          <Button size="sm" type="submit" variant="destructive">
-                            {t("delete")}
-                          </Button>
+                          <SubmitButton
+                            size="sm"
+                            variant="destructive"
+                            label={t("delete")}
+                            pendingLabel="Deleting..."
+                          />
                         </form>
                       </div>
                     </TD>

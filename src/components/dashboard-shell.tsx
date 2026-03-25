@@ -33,12 +33,13 @@ export function DashboardShell({
     <div className="min-h-screen bg-background">
       <div
         className={`grid min-h-screen grid-cols-1 ${
-          collapsed ? "lg:grid-cols-[88px_1fr]" : "lg:grid-cols-[280px_1fr]"
+          collapsed ? "lg:grid-cols-[72px_1fr]" : "lg:grid-cols-[240px_1fr]"
         }`}
       >
         <Sidebar
           role={role}
           collapsed={collapsed}
+          onToggle={() => setCollapsed((value) => !value)}
           className="hidden lg:block"
         />
         <div className="flex flex-col">
@@ -54,13 +55,6 @@ export function DashboardShell({
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setCollapsed((value) => !value)}
-                  className="rounded-md border border-border bg-[var(--surface)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground hover:bg-muted/60"
-                >
-                  {collapsed ? t("expand") : t("collapse")}
-                </button>
                 <LanguageToggle />
                 <ThemeToggle />
                 <LogoutButton />

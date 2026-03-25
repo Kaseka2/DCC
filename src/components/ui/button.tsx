@@ -13,6 +13,7 @@ type ButtonSize = "sm" | "md" | "lg";
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  isLoading?: boolean;
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
@@ -37,16 +38,19 @@ export function Button({
   className,
   variant = "primary",
   size = "md",
+  isLoading = false,
   ...props
 }: ButtonProps) {
   return (
     <button
       className={cn(
-        "inline-flex items-center justify-center rounded-md font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer",
         variantClasses[variant],
         sizeClasses[size],
         className
       )}
+      aria-busy={isLoading || props["aria-busy"]}
+      disabled={isLoading || props.disabled}
       {...props}
     />
   );

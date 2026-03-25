@@ -74,26 +74,26 @@ export async function GET(
 
   if (type === "donations") {
     const { data } = await supabase
-      .from("donations")
-      .select("amount, type, payment_method, date, members(full_name)")
+      .from("offerings")
+      .select("amount, date, notes, offering_types(name), members(full_name)")
       .order("date", { ascending: false });
     const rows =
       (data as
         | {
-            amount: number;
-            type: string;
-            payment_method: string | null;
-            date: string;
-            members: { full_name: string } | null;
-          }[]
+          amount: number;
+          date: string;
+          notes: string | null;
+          offering_types: { name: string } | null;
+          members: { full_name: string } | null;
+        }[]
         | null) ?? [];
     const csv = toCsv(
       rows.map((row) => ({
         member: row.members?.full_name ?? "",
         amount: row.amount,
-        type: row.type,
-        payment_method: row.payment_method,
+        type: row.offering_types?.name ?? "",
         date: row.date,
+        notes: row.notes ?? "",
       }))
     );
     return new NextResponse(csv, {

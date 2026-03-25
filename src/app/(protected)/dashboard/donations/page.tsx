@@ -1,13 +1,17 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getCurrentRole } from "@/lib/auth";
-import { DonationsClient, type DonationRow } from "./donations-client";
+import { DonationsClient, type OfferingRow, type OfferingType } from "./donations-client";
 
-type RawDonationRow = {
+type RawOfferingRow = {
   id: string;
+  member_id: string | null;
   amount: number;
-  type: string;
-  payment_method: string | null;
   date: string;
+  notes: string | null;
+  offering_types:
+    | { name: string; requires_member: boolean }[]
+    | { name: string; requires_member: boolean }
+    | null;
   members: { full_name: string }[] | { full_name: string } | null;
 };
 
@@ -21,14 +25,22 @@ export default async function DonationsPage() {
     .select("id, full_name")
     .order("full_name");
 
-  const { data: donations } = await supabase
-    .from("donations")
-    .select("id, amount, type, payment_method, date, members(full_name)")
+  const { data: offeringTypes } = await supabase
+    .from("offering_types")
+    .select("id, name, description, requires_member")
+    .order("name");
+
+  const { data: offerings } = await supabase
+    .from("offerings")
+    .select("id, member_id, amount, date, notes, offering_types(name, requires_member), members(full_name)")
     .order("date", { ascending: false });
 
-  const normalizedDonations: DonationRow[] = (donations as RawDonationRow[] | null ?? []).map(
+  const normalizedOfferings: OfferingRow[] = (offerings as RawOfferingRow[] | null ?? []).map(
     (row) => ({
       ...row,
+      offering_types: Array.isArray(row.offering_types)
+        ? row.offering_types[0] ?? null
+        : row.offering_types,
       members: Array.isArray(row.members) ? row.members[0] ?? null : row.members,
     })
   );
@@ -36,7 +48,8 @@ export default async function DonationsPage() {
   return (
     <DonationsClient
       members={members ?? []}
-      donations={normalizedDonations}
+      offeringTypes={(offeringTypes as OfferingType[]) ?? []}
+      offerings={normalizedOfferings}
       canManage={canManage}
     />
   );

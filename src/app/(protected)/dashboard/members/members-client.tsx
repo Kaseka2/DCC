@@ -1,7 +1,7 @@
 "use client";
 
 import { PageHeader } from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
@@ -47,7 +47,7 @@ export function MembersClient({
                   <option value="male">Male</option>
                 </Select>
                 <div className="md:col-span-4">
-                  <Button type="submit">{t("addMember")}</Button>
+                  <SubmitButton label={t("addMember")} pendingLabel="Adding..." />
                 </div>
               </form>
             </div>
@@ -90,9 +90,12 @@ export function MembersClient({
                           <option value="female">Female</option>
                           <option value="male">Male</option>
                         </Select>
-                        <Button size="sm" type="submit" variant="secondary">
-                          {t("save")}
-                        </Button>
+                        <SubmitButton
+                          size="sm"
+                          variant="secondary"
+                          label={t("save")}
+                          pendingLabel="Saving..."
+                        />
                       </form>
                     ) : (
                       member.full_name
@@ -105,9 +108,12 @@ export function MembersClient({
                     <TD>
                       <form action={deleteMember}>
                         <input type="hidden" name="member_id" value={member.id} />
-                        <Button size="sm" type="submit" variant="destructive">
-                          {t("delete")}
-                        </Button>
+                        <SubmitButton
+                          size="sm"
+                          variant="destructive"
+                          label={t("delete")}
+                          pendingLabel="Deleting..."
+                        />
                       </form>
                     </TD>
                   )}
