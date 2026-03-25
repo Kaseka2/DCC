@@ -61,7 +61,9 @@ export function Sidebar({
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
           {collapsed ? "CMS" : "Church CMS"}
         </p>
-        {!collapsed && <h2 className="text-lg font-semibold">Dashboard</h2>}
+        {!collapsed && (
+          <h2 className="text-lg font-semibold">{t("dashboard")}</h2>
+        )}
       </div>
       <nav className="space-y-1">
         {links.map((link) => (

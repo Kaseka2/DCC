@@ -59,7 +59,7 @@ export function DashboardShell({
                   onClick={() => setCollapsed((value) => !value)}
                   className="rounded-md border border-border bg-[var(--surface)] px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground hover:bg-muted/60"
                 >
-                  {collapsed ? "Expand" : "Collapse"}
+                  {collapsed ? t("expand") : t("collapse")}
                 </button>
                 <LanguageToggle />
                 <ThemeToggle />

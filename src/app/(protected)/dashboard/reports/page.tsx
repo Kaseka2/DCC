@@ -3,21 +3,23 @@
 import { PageHeader } from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-const reports = [
-  { label: "Members", type: "members", description: "Member directory export." },
-  { label: "Donations", type: "donations", description: "Giving records export." },
-  { label: "Attendance", type: "attendance", description: "Attendance records export." },
-  { label: "Events", type: "events", description: "Event calendar export." },
-  { label: "Sermons", type: "sermons", description: "Sermon library export." },
-];
+import { useLanguage } from "@/components/language-provider";
 
 export default function ReportsPage() {
+  const { t } = useLanguage();
+  const reports = [
+    { label: t("members"), type: "members", description: t("reportsMembers") },
+    { label: t("donations"), type: "donations", description: t("reportsDonations") },
+    { label: t("attendance"), type: "attendance", description: t("reportsAttendance") },
+    { label: t("events"), type: "events", description: t("reportsEvents") },
+    { label: t("sermons"), type: "sermons", description: t("reportsSermons") },
+  ];
+
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Reports & Exports"
-        description="Download CSV exports for reporting and backups."
+        title={t("reportsExports")}
+        description={t("reportsSubtitle")}
       />
       <div className="grid gap-4 md:grid-cols-2">
         {reports.map((report) => (
@@ -34,7 +36,7 @@ export default function ReportsPage() {
                   window.location.href = `/api/reports/${report.type}`;
                 }}
               >
-                Download CSV
+                {t("downloadCsv")}
               </Button>
             </CardContent>
           </Card>

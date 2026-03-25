@@ -7,6 +7,7 @@ import { usernameToEmail, normalizeUsername } from "@/lib/username";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from "@/components/language-provider";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -74,29 +76,28 @@ export default function LoginPage() {
             Church Management System
           </p>
           <h1 className="mt-4 text-3xl font-semibold">
-            Welcome back to your ministry hub
+            {t("loginHeadline")}
           </h1>
           <p className="mt-3 text-sm text-muted-foreground">
-            Secure access for leadership, staff, and members with centralized
-            management for giving, attendance, and events.
+            {t("loginSubtitle")}
           </p>
           <div className="mt-8 grid gap-3 text-sm text-muted-foreground">
             <div className="rounded-2xl border border-border bg-[var(--surface-muted)] px-4 py-3">
-              Track membership, giving, and attendance in one place.
+              {t("loginFeatureOne")}
             </div>
             <div className="rounded-2xl border border-border bg-[var(--surface-muted)] px-4 py-3">
-              Admin‑controlled accounts with role-based access.
+              {t("loginFeatureTwo")}
             </div>
           </div>
         </div>
         <Card className="w-full max-w-md place-self-center">
           <CardHeader>
-            <CardTitle>Sign in</CardTitle>
+            <CardTitle>{t("signIn")}</CardTitle>
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="space-y-2">
-                <label className="text-sm font-semibold">Username</label>
+                <label className="text-sm font-semibold">{t("username")}</label>
                 <Input
                   autoComplete="username"
                   value={username}
@@ -108,7 +109,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold">Password</label>
+                <label className="text-sm font-semibold">{t("password")}</label>
                 <Input
                   type="password"
                   autoComplete="current-password"
@@ -124,7 +125,7 @@ export default function LoginPage() {
                 </div>
               )}
               <Button className="w-full" disabled={isLoading} type="submit">
-                {isLoading ? "Signing in..." : "Sign In"}
+                {isLoading ? "Signing in..." : t("signIn")}
               </Button>
             </form>
           </CardContent>

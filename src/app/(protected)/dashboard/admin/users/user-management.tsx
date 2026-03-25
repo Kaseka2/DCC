@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { type Role } from "@/lib/types";
 import { normalizeUsername } from "@/lib/username";
 import { PageHeader } from "@/components/page-header";
+import { useLanguage } from "@/components/language-provider";
 
 type UserRow = {
   id: string;
@@ -24,6 +25,7 @@ type UserRow = {
 const roles: Role[] = ["admin", "pastor", "secretary", "treasurer", "member"];
 
 export default function UserManagement() {
+  const { t } = useLanguage();
   const [users, setUsers] = useState<UserRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -98,7 +100,7 @@ export default function UserManagement() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="User Management"
+        title={t("userManagement")}
         description="Create staff and member accounts with assigned roles."
       />
       <Card>
@@ -112,7 +114,7 @@ export default function UserManagement() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, full_name: event.target.value }))
               }
-              placeholder="Full name"
+              placeholder={t("fullName")}
               required
             />
             <Input
@@ -120,7 +122,7 @@ export default function UserManagement() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, username: event.target.value }))
               }
-              placeholder="Username"
+              placeholder={t("username")}
               required
             />
             <Input
@@ -128,7 +130,7 @@ export default function UserManagement() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, password: event.target.value }))
               }
-              placeholder="Temporary password"
+              placeholder={t("temporaryPassword")}
               type="password"
               required
             />
@@ -152,10 +154,10 @@ export default function UserManagement() {
               onChange={(event) =>
                 setForm((prev) => ({ ...prev, phone: event.target.value }))
               }
-              placeholder="Phone"
+              placeholder={t("phone")}
             />
             <div className="md:col-span-5">
-              <Button type="submit">Create User</Button>
+              <Button type="submit">{t("createUser")}</Button>
             </div>
           </form>
 
@@ -172,11 +174,11 @@ export default function UserManagement() {
               <Table>
                 <THead>
                   <tr>
-                    <TH>Name</TH>
-                    <TH>Username</TH>
-                    <TH>Role</TH>
-                    <TH>Phone</TH>
-                    <TH>Created</TH>
+                    <TH>{t("fullName")}</TH>
+                    <TH>{t("username")}</TH>
+                    <TH>{t("role")}</TH>
+                    <TH>{t("phone")}</TH>
+                    <TH>{t("created")}</TH>
                   </tr>
                 </THead>
                 <TBody>
