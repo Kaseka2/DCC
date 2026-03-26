@@ -7,6 +7,7 @@ alter table public.sermons enable row level security;
 alter table public.attendance enable row level security;
 alter table public.offering_types enable row level security;
 alter table public.offerings enable row level security;
+alter table public.pledges enable row level security;
 
 -- Users table policies
 drop policy if exists "Users can read own role" on public.users;
@@ -137,6 +138,31 @@ create policy "Treasurers manage offerings"
 drop policy if exists "Members read own offerings" on public.offerings;
 create policy "Members read own offerings"
   on public.offerings
+  for select
+  using (
+    member_id in (
+      select id from public.members where user_id = auth.uid()
+    )
+  );
+
+-- Pledges policies
+drop policy if exists "Admins manage pledges" on public.pledges;
+create policy "Admins manage pledges"
+  on public.pledges
+  for all
+  using (public.current_role() = 'admin')
+  with check (public.current_role() = 'admin');
+
+drop policy if exists "Treasurers manage pledges" on public.pledges;
+create policy "Treasurers manage pledges"
+  on public.pledges
+  for all
+  using (public.current_role() = 'treasurer')
+  with check (public.current_role() = 'treasurer');
+
+drop policy if exists "Members read own pledges" on public.pledges;
+create policy "Members read own pledges"
+  on public.pledges
   for select
   using (
     member_id in (

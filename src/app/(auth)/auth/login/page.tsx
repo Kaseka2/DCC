@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLanguage } from "@/components/language-provider";
 import { Spinner } from "@/components/ui/spinner";
+import Image from "next/image";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -70,23 +71,40 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#f6f4f0] via-[#efe9df] to-[#e7dfd1] px-4 py-12">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,_#3a1457_0%,_#1b0a2c_45%,_#0d0718_100%)] px-4 py-12">
       <div className="mx-auto grid w-full max-w-5xl gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="rounded-3xl border border-border bg-[var(--surface)] p-8 shadow-[0_24px_60px_rgba(22,18,11,0.12)]">
-          <p className="text-xs uppercase tracking-[0.35em] text-muted-foreground">
-            Church Management System
-          </p>
+        <div className="rounded-3xl border border-white/20 bg-white/10 p-8 text-white shadow-[0_24px_60px_rgba(7,4,14,0.6)] backdrop-blur">
+          <div className="flex items-center gap-3">
+            <div className="relative h-12 w-12 overflow-hidden rounded-full border border-border bg-[var(--surface-muted)]">
+              <Image
+                src="/logo.png"
+                alt="TAG DCC"
+                fill
+                className="object-cover"
+                sizes="48px"
+                priority
+              />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.35em] text-white/70">
+                TAG DCC
+              </p>
+              <p className="text-sm text-white/70">
+                Church Management System
+              </p>
+            </div>
+          </div>
           <h1 className="mt-4 text-3xl font-semibold">
             {t("loginHeadline")}
           </h1>
-          <p className="mt-3 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-white/70">
             {t("loginSubtitle")}
           </p>
-          <div className="mt-8 grid gap-3 text-sm text-muted-foreground">
-            <div className="rounded-2xl border border-border bg-[var(--surface-muted)] px-4 py-3">
+          <div className="mt-8 grid gap-3 text-sm text-white/70">
+            <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3">
               {t("loginFeatureOne")}
             </div>
-            <div className="rounded-2xl border border-border bg-[var(--surface-muted)] px-4 py-3">
+            <div className="rounded-2xl border border-white/20 bg-white/10 px-4 py-3">
               {t("loginFeatureTwo")}
             </div>
           </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +26,7 @@ export function MembersClient({
   canManage: boolean;
 }) {
   const { t } = useLanguage();
+  const [editingMemberId, setEditingMemberId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -66,55 +68,69 @@ export function MembersClient({
             <TBody>
               {members.map((member) => (
                 <tr key={member.id}>
-                  <TD>
-                    {canManage ? (
-                      <form action={updateMember} className="flex items-center gap-2">
-                        <input type="hidden" name="member_id" value={member.id} />
-                        <Input
-                          name="full_name"
-                          defaultValue={member.full_name ?? ""}
-                          className="h-8"
-                          required
-                        />
-                        <Input
-                          name="phone"
-                          defaultValue={member.phone ?? ""}
-                          className="h-8"
-                        />
-                        <Select
-                          name="gender"
-                          defaultValue={member.gender ?? ""}
-                          className="h-8"
-                        >
-                          <option value="">{t("gender")}</option>
-                          <option value="female">Female</option>
-                          <option value="male">Male</option>
-                        </Select>
-                        <SubmitButton
-                          size="sm"
-                          variant="secondary"
-                          label={t("save")}
-                          pendingLabel="Saving..."
-                        />
-                      </form>
-                    ) : (
-                      member.full_name
-                    )}
-                  </TD>
+                  <TD>{member.full_name}</TD>
                   <TD>{member.username}</TD>
                   <TD>{member.phone ?? "-"}</TD>
                   <TD>{member.gender ?? "-"}</TD>
                   {canManage && (
                     <TD>
-                      <form action={deleteMember}>
-                        <input type="hidden" name="member_id" value={member.id} />
-                        <SubmitButton
-                          size="sm"
-                          variant="destructive"
-                          label={t("delete")}
-                          pendingLabel="Deleting..."
-                        />
-                      </form>
+                      {editingMemberId === member.id ? (
+                        <div className="flex flex-col gap-2">
+                          <form action={updateMember} className="grid grid-cols-4 gap-2">
+                            <input type="hidden" name="member_id" value={member.id} />
+                            <Input
+                              name="full_name"
+                              defaultValue={member.full_name ?? ""}
+                              className="h-8"
+                              required
+                            />
+                            <Input
+                              name="phone"
+                              defaultValue={member.phone ?? ""}
+                              className="h-8"
+                            />
+                            <Select
+                              name="gender"
+                              defaultValue={member.gender ?? ""}
+                              className="h-8"
+                            >
+                              <option value="">{t("gender")}</option>
+                              <option value="female">Female</option>
+                              <option value="male">Male</option>
+                            </Select>
+                            <SubmitButton
+                              size="sm"
+                              variant="secondary"
+                              label={t("save")}
+                              pendingLabel="Saving..."
+                            />
+                            <button
+                              type="button"
+                              className="text-xs text-muted-foreground underline"
+                              onClick={() => setEditingMemberId(null)}
+                            >
+                              {t("cancel")}
+                            </button>
+                          </form>
+                          <form action={deleteMember}>
+                            <input type="hidden" name="member_id" value={member.id} />
+                            <SubmitButton
+                              size="sm"
+                              variant="destructive"
+                              label={t("delete")}
+                              pendingLabel="Deleting..."
+                            />
+                          </form>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-xs font-semibold text-primary underline"
+                          onClick={() => setEditingMemberId(member.id)}
+                        >
+                          {t("edit")}
+                        </button>
+                      )}
                     </TD>
                   )}
                 </tr>

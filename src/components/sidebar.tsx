@@ -1,6 +1,7 @@
- "use client";
+"use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   Calendar,
   ClipboardList,
@@ -61,12 +62,26 @@ export function Sidebar({
     >
       <div className="mb-4 flex items-center justify-between gap-2">
         <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            {collapsed ? "CMS" : "Church CMS"}
-          </p>
-          {!collapsed && (
-            <h2 className="text-lg font-semibold">{t("dashboard")}</h2>
-          )}
+          <div className={cn("flex items-center gap-2", collapsed && "justify-center")}>
+            <div className="relative h-8 w-8 overflow-hidden rounded-full border border-border bg-[var(--surface-muted)]">
+              <Image
+                src="/logo.png"
+                alt="TAG DCC"
+                fill
+                className="object-cover"
+                sizes="32px"
+                priority
+              />
+            </div>
+            {!collapsed && (
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  TAG DCC
+                </p>
+                <h2 className="text-lg font-semibold">{t("dashboard")}</h2>
+              </div>
+            )}
+          </div>
         </div>
         {onToggle && (
           <button

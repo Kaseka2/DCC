@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -24,6 +25,7 @@ export function SermonsClient({
   canManage: boolean;
 }) {
   const { t } = useLanguage();
+  const [editingSermonId, setEditingSermonId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -67,30 +69,47 @@ export function SermonsClient({
                   <TD>{sermon.summary ?? "-"}</TD>
                   {canManage && (
                     <TD>
-                      <div className="flex flex-col gap-2">
-                        <form action={updateSermon} className="grid grid-cols-4 gap-2">
-                          <input type="hidden" name="sermon_id" value={sermon.id} />
-                          <Input name="title" defaultValue={sermon.title} className="h-8" />
-                          <Input name="preacher" defaultValue={sermon.preacher} className="h-8" />
-                          <Input name="date" type="date" defaultValue={sermon.date} className="h-8" />
-                          <Input name="summary" defaultValue={sermon.summary ?? ""} className="h-8" />
-                          <SubmitButton
-                            size="sm"
-                            variant="secondary"
-                            label={t("save")}
-                            pendingLabel="Saving..."
-                          />
-                        </form>
-                        <form action={deleteSermon}>
-                          <input type="hidden" name="sermon_id" value={sermon.id} />
-                          <SubmitButton
-                            size="sm"
-                            variant="destructive"
-                            label={t("delete")}
-                            pendingLabel="Deleting..."
-                          />
-                        </form>
-                      </div>
+                      {editingSermonId === sermon.id ? (
+                        <div className="flex flex-col gap-2">
+                          <form action={updateSermon} className="grid grid-cols-4 gap-2">
+                            <input type="hidden" name="sermon_id" value={sermon.id} />
+                            <Input name="title" defaultValue={sermon.title} className="h-8" />
+                            <Input name="preacher" defaultValue={sermon.preacher} className="h-8" />
+                            <Input name="date" type="date" defaultValue={sermon.date} className="h-8" />
+                            <Input name="summary" defaultValue={sermon.summary ?? ""} className="h-8" />
+                            <SubmitButton
+                              size="sm"
+                              variant="secondary"
+                              label={t("save")}
+                              pendingLabel="Saving..."
+                            />
+                            <button
+                              type="button"
+                              className="text-xs text-muted-foreground underline"
+                              onClick={() => setEditingSermonId(null)}
+                            >
+                              {t("cancel")}
+                            </button>
+                          </form>
+                          <form action={deleteSermon}>
+                            <input type="hidden" name="sermon_id" value={sermon.id} />
+                            <SubmitButton
+                              size="sm"
+                              variant="destructive"
+                              label={t("delete")}
+                              pendingLabel="Deleting..."
+                            />
+                          </form>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-xs font-semibold text-primary underline"
+                          onClick={() => setEditingSermonId(sermon.id)}
+                        >
+                          {t("edit")}
+                        </button>
+                      )}
                     </TD>
                   )}
                 </tr>

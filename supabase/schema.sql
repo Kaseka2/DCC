@@ -64,6 +64,19 @@ create table if not exists public.offerings (
   member_id uuid references public.members(id) on delete set null,
   amount numeric(12, 2) not null check (amount >= 0),
   date date not null,
+  service_name text,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.pledges (
+  id uuid primary key default gen_random_uuid(),
+  member_id uuid references public.members(id) on delete set null,
+  pledger_name text,
+  amount numeric(12, 2) not null check (amount >= 0),
+  purpose text,
+  date date not null,
+  status text not null default 'open' check (status in ('open', 'fulfilled', 'cancelled')),
   notes text,
   created_at timestamptz not null default now()
 );

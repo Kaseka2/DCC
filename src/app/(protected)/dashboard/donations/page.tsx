@@ -4,14 +4,28 @@ import { DonationsClient, type OfferingRow, type OfferingType } from "./donation
 
 type RawOfferingRow = {
   id: string;
+  offering_type_id: string;
   member_id: string | null;
   amount: number;
   date: string;
+  service_name: string | null;
   notes: string | null;
   offering_types:
     | { name: string; requires_member: boolean }[]
     | { name: string; requires_member: boolean }
     | null;
+  members: { full_name: string }[] | { full_name: string } | null;
+};
+
+type RawPledgeRow = {
+  id: string;
+  member_id: string | null;
+  pledger_name: string | null;
+  amount: number;
+  purpose: string | null;
+  date: string;
+  status: string;
+  notes: string | null;
   members: { full_name: string }[] | { full_name: string } | null;
 };
 
@@ -32,7 +46,12 @@ export default async function DonationsPage() {
 
   const { data: offerings } = await supabase
     .from("offerings")
-    .select("id, member_id, amount, date, notes, offering_types(name, requires_member), members(full_name)")
+    .select("id, offering_type_id, member_id, amount, date, service_name, notes, offering_types(name, requires_member), members(full_name)")
+    .order("date", { ascending: false });
+
+  const { data: pledges } = await supabase
+    .from("pledges")
+    .select("id, member_id, pledger_name, amount, purpose, date, status, notes, members(full_name)")
     .order("date", { ascending: false });
 
   const normalizedOfferings: OfferingRow[] = (offerings as RawOfferingRow[] | null ?? []).map(
@@ -45,11 +64,19 @@ export default async function DonationsPage() {
     })
   );
 
+  const normalizedPledges = (pledges as RawPledgeRow[] | null ?? []).map(
+    (row) => ({
+      ...row,
+      members: Array.isArray(row.members) ? row.members[0] ?? null : row.members,
+    })
+  );
+
   return (
     <DonationsClient
       members={members ?? []}
       offeringTypes={(offeringTypes as OfferingType[]) ?? []}
       offerings={normalizedOfferings}
+      pledges={normalizedPledges}
       canManage={canManage}
     />
   );

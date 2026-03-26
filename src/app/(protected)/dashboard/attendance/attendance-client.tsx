@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +33,7 @@ export function AttendanceClient({
   canManage: boolean;
 }) {
   const { t } = useLanguage();
+  const [editingAttendanceId, setEditingAttendanceId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -98,32 +100,49 @@ export function AttendanceClient({
                   <TD>{row.notes ?? "-"}</TD>
                   {canManage && (
                     <TD>
-                      <div className="flex flex-col gap-2">
-                        <form action={updateAttendance} className="flex items-center gap-2">
-                          <input type="hidden" name="attendance_id" value={row.id} />
-                          <Select name="status" defaultValue={row.status} className="h-8">
-                            <option value="present">Present</option>
-                            <option value="absent">Absent</option>
-                            <option value="excused">Excused</option>
-                          </Select>
-                          <Input name="notes" defaultValue={row.notes ?? ""} className="h-8" />
-                          <SubmitButton
-                            size="sm"
-                            variant="secondary"
-                            label={t("save")}
-                            pendingLabel="Saving..."
-                          />
-                        </form>
-                        <form action={deleteAttendance}>
-                          <input type="hidden" name="attendance_id" value={row.id} />
-                          <SubmitButton
-                            size="sm"
-                            variant="destructive"
-                            label={t("delete")}
-                            pendingLabel="Deleting..."
-                          />
-                        </form>
-                      </div>
+                      {editingAttendanceId === row.id ? (
+                        <div className="flex flex-col gap-2">
+                          <form action={updateAttendance} className="flex items-center gap-2">
+                            <input type="hidden" name="attendance_id" value={row.id} />
+                            <Select name="status" defaultValue={row.status} className="h-8">
+                              <option value="present">Present</option>
+                              <option value="absent">Absent</option>
+                              <option value="excused">Excused</option>
+                            </Select>
+                            <Input name="notes" defaultValue={row.notes ?? ""} className="h-8" />
+                            <SubmitButton
+                              size="sm"
+                              variant="secondary"
+                              label={t("save")}
+                              pendingLabel="Saving..."
+                            />
+                            <button
+                              type="button"
+                              className="text-xs text-muted-foreground underline"
+                              onClick={() => setEditingAttendanceId(null)}
+                            >
+                              {t("cancel")}
+                            </button>
+                          </form>
+                          <form action={deleteAttendance}>
+                            <input type="hidden" name="attendance_id" value={row.id} />
+                            <SubmitButton
+                              size="sm"
+                              variant="destructive"
+                              label={t("delete")}
+                              pendingLabel="Deleting..."
+                            />
+                          </form>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-xs font-semibold text-primary underline"
+                          onClick={() => setEditingAttendanceId(row.id)}
+                        >
+                          {t("edit")}
+                        </button>
+                      )}
                     </TD>
                   )}
                 </tr>

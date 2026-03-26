@@ -75,13 +75,14 @@ export async function GET(
   if (type === "donations") {
     const { data } = await supabase
       .from("offerings")
-      .select("amount, date, notes, offering_types(name), members(full_name)")
+      .select("amount, date, service_name, notes, offering_types(name), members(full_name)")
       .order("date", { ascending: false });
     const rows =
       (data as
         | {
           amount: number;
           date: string;
+          service_name: string | null;
           notes: string | null;
           offering_types: { name: string } | null;
           members: { full_name: string } | null;
@@ -93,6 +94,7 @@ export async function GET(
         amount: row.amount,
         type: row.offering_types?.name ?? "",
         date: row.date,
+        service: row.service_name ?? "",
         notes: row.notes ?? "",
       }))
     );

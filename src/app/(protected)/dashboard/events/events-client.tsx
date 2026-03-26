@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { PageHeader } from "@/components/page-header";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,6 +26,7 @@ export function EventsClient({
   canManage: boolean;
 }) {
   const { t } = useLanguage();
+  const [editingEventId, setEditingEventId] = useState<string | null>(null);
 
   return (
     <div className="space-y-6">
@@ -71,31 +73,48 @@ export function EventsClient({
                   <TD>{event.end_date ?? "-"}</TD>
                   {canManage && (
                     <TD>
-                      <div className="flex flex-col gap-2">
-                        <form action={updateEvent} className="grid grid-cols-5 gap-2">
-                          <input type="hidden" name="event_id" value={event.id} />
-                          <Input name="title" defaultValue={event.title} className="h-8" />
-                          <Input name="location" defaultValue={event.location ?? ""} className="h-8" />
-                          <Input name="description" defaultValue={event.description ?? ""} className="h-8" />
-                          <Input name="start_date" type="date" defaultValue={event.start_date} className="h-8" />
-                          <Input name="end_date" type="date" defaultValue={event.end_date ?? ""} className="h-8" />
-                          <SubmitButton
-                            size="sm"
-                            variant="secondary"
-                            label={t("save")}
-                            pendingLabel="Saving..."
-                          />
-                        </form>
-                        <form action={deleteEvent}>
-                          <input type="hidden" name="event_id" value={event.id} />
-                          <SubmitButton
-                            size="sm"
-                            variant="destructive"
-                            label={t("delete")}
-                            pendingLabel="Deleting..."
-                          />
-                        </form>
-                      </div>
+                      {editingEventId === event.id ? (
+                        <div className="flex flex-col gap-2">
+                          <form action={updateEvent} className="grid grid-cols-5 gap-2">
+                            <input type="hidden" name="event_id" value={event.id} />
+                            <Input name="title" defaultValue={event.title} className="h-8" />
+                            <Input name="location" defaultValue={event.location ?? ""} className="h-8" />
+                            <Input name="description" defaultValue={event.description ?? ""} className="h-8" />
+                            <Input name="start_date" type="date" defaultValue={event.start_date} className="h-8" />
+                            <Input name="end_date" type="date" defaultValue={event.end_date ?? ""} className="h-8" />
+                            <SubmitButton
+                              size="sm"
+                              variant="secondary"
+                              label={t("save")}
+                              pendingLabel="Saving..."
+                            />
+                            <button
+                              type="button"
+                              className="text-xs text-muted-foreground underline"
+                              onClick={() => setEditingEventId(null)}
+                            >
+                              {t("cancel")}
+                            </button>
+                          </form>
+                          <form action={deleteEvent}>
+                            <input type="hidden" name="event_id" value={event.id} />
+                            <SubmitButton
+                              size="sm"
+                              variant="destructive"
+                              label={t("delete")}
+                              pendingLabel="Deleting..."
+                            />
+                          </form>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-xs font-semibold text-primary underline"
+                          onClick={() => setEditingEventId(event.id)}
+                        >
+                          {t("edit")}
+                        </button>
+                      )}
                     </TD>
                   )}
                 </tr>
